@@ -3,7 +3,7 @@ use crate::engine::dispatcher::Dispatcher;
 use crate::engine::trigger::Trigger;
 use crate::waha::models::WahaEvent;
 use futures_util::StreamExt;
-use log::{error, info, warn};
+use log::{debug, error, info, warn};
 use std::sync::Arc;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
 
@@ -68,6 +68,10 @@ impl WahaClient {
             Message::Close(frame) => {
                 warn!("Connection closed: {:?}", frame);
                 false
+            }
+            Message::Ping(frame) => {
+                debug!("Connection ping: {:?}", frame);
+                true
             }
             msg => {
                 warn!("Received unhandled message: {:?}", msg);
