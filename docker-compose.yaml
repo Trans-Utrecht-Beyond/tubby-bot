@@ -1,0 +1,19 @@
+services:
+  waha:
+    image: devlikeapro/waha:arm
+    restart: always
+    ports:
+      - "3000:3000"
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "10"
+    volumes:
+      - "./sessions:/app/.sessions"
+      - "./media:/app/.media"
+    env_file:
+      - .env
