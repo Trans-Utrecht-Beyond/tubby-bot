@@ -17,3 +17,13 @@ services:
       - "./media:/app/.media"
     env_file:
       - .env
+
+  signal-api:
+    image: bbernhard/signal-cli-rest-api:latest
+    restart: always
+    environment:
+      - MODE=json-rpc
+    ports:
+      - "3001:8080"
+    volumes:
+      - "./signal-cli-config:/home/.local/share/signal-cli"

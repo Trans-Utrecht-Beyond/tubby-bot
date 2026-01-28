@@ -25,14 +25,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         e
     })?;
 
+    let config = Arc::new(config);
+
     match cli.command {
         Commands::Listen => {
             let mut dispatcher = Dispatcher::new();
-            dispatcher.register_handler(Arc::new(engine::handlers::LoggingHandler));
+            dispatcher.register_handler(Arc::new(engine::handlers::LoggingHandler {
+                config: Arc::clone(&config),
+            }));
+            dispatcher.register_handler(Arc::new(engine::handlers::WahaSendSeenHandler::new(
+                Arc::clone(&config),
+            )));
 
             let dispatcher = Arc::new(dispatcher);
             // TODO: Register more handlers here as needed
-            let waha_client = WahaClient::new(config, dispatcher);
+            let waha_client = WahaClient::new((*config).clone(), dispatcher);
             waha_client.listen().await?;
         }
     }

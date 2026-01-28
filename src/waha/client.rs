@@ -18,10 +18,10 @@ impl WahaClient {
     }
 
     pub fn get_ws_url(&self) -> String {
-        let ws_base_url = if self.config.base_url.starts_with("https://") {
-            self.config.base_url.replace("https://", "wss://")
+        let ws_base_url = if self.config.waha_base_url.starts_with("https://") {
+            self.config.waha_base_url.replace("https://", "wss://")
         } else {
-            self.config.base_url.replace("http://", "ws://")
+            self.config.waha_base_url.replace("http://", "ws://")
         };
 
         format!(
@@ -113,7 +113,9 @@ mod tests {
     fn setup_client() -> WahaClient {
         let config = Config {
             api_key: "key".to_string(),
-            base_url: "http://localhost:3000".to_string(),
+            waha_base_url: "http://localhost:3000".to_string(),
+            waha_api_key: "key".to_string(),
+            signal_base_url: "http://localhost:3001".to_string(),
         };
         let dispatcher = Arc::new(Dispatcher::new());
         WahaClient::new(config, dispatcher)
@@ -128,7 +130,9 @@ mod tests {
 
         let config_tls = Config {
             api_key: "key".to_string(),
-            base_url: "https://example.com".to_string(),
+            waha_base_url: "https://example.com".to_string(),
+            waha_api_key: "key".to_string(),
+            signal_base_url: "http://localhost:3001".to_string(),
         };
         let dispatcher = Arc::new(Dispatcher::new());
         let client_tls = WahaClient::new(config_tls, dispatcher);
