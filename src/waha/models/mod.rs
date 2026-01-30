@@ -63,12 +63,9 @@ mod tests {
 }"#;
 
         let event: WahaEvent = serde_json::from_str(json).unwrap();
-        match event {
-            WahaEvent::Message(msg) => {
-                assert_eq!(msg.payload.body, "Blooooo");
-                assert_eq!(msg.me.push_name, "Trans Utrecht and Beyond");
-            }
-        }
+        let WahaEvent::Message(msg) = event;
+        assert_eq!(msg.payload.body, "Blooooo");
+        assert_eq!(msg.me.push_name, "Trans Utrecht and Beyond");
     }
 
     #[test]
@@ -116,10 +113,9 @@ mod tests {
 
         let event: WahaEvent =
             serde_json::from_str(json).expect("Failed to deserialize GOWS event");
-        if let WahaEvent::Message(msg) = event {
-            assert_eq!(msg.payload.body, "Bla");
-            assert!(msg.engine.is_none());
-            assert_eq!(msg.environment.engine, "GOWS");
-        }
+        let WahaEvent::Message(msg) = event;
+        assert_eq!(msg.payload.body, "Bla");
+        assert!(msg.engine.is_none());
+        assert_eq!(msg.environment.engine, "GOWS");
     }
 }

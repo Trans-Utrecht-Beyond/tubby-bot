@@ -1,3 +1,5 @@
+use crate::constants::TUB_PHONE_NUMBER;
+
 use super::{LinkPreview, Mention};
 use serde::{Deserialize, Serialize};
 
@@ -33,10 +35,10 @@ pub struct SendMessageRequest {
 }
 
 impl SendMessageRequest {
-    pub fn new(message: String, number: String, recipients: Vec<String>) -> Self {
+    pub fn new(message: String, recipients: Vec<String>) -> Self {
         Self {
             message,
-            number,
+            number: TUB_PHONE_NUMBER.to_string(),
             recipients,
             base64_attachments: None,
             edit_timestamp: None,

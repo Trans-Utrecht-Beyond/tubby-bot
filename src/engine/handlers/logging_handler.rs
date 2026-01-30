@@ -10,6 +10,12 @@ pub struct LoggingHandler {
     pub config: Arc<Config>,
 }
 
+impl LoggingHandler {
+    pub fn new(config: Arc<Config>) -> Self {
+        Self { config }
+    }
+}
+
 #[async_trait]
 impl Handler for LoggingHandler {
     fn condition(&self, _trigger: &Trigger) -> bool {

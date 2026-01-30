@@ -112,10 +112,11 @@ mod tests {
 
     fn setup_client() -> WahaClient {
         let config = Config {
-            api_key: "key".to_string(),
-            waha_base_url: "http://localhost:3000".to_string(),
-            waha_api_key: "key".to_string(),
-            signal_base_url: "http://localhost:3001".to_string(),
+            api_key: "test_key".to_string(),
+            waha_base_url: "http://test_url".to_string(),
+            waha_api_key: "test_key".to_string(),
+            signal_base_url: "http://signal_url".to_string(),
+            ..Default::default()
         };
         let dispatcher = Arc::new(Dispatcher::new());
         WahaClient::new(config, dispatcher)
@@ -125,14 +126,15 @@ mod tests {
     fn test_get_ws_url() {
         let client = setup_client();
         let url = client.get_ws_url();
-        assert!(url.starts_with("ws://localhost:3000/ws"));
-        assert!(url.contains("x-api-key=key"));
+        assert!(url.starts_with("ws://test_url/ws"));
+        assert!(url.contains("x-api-key=test_key"));
 
         let config_tls = Config {
             api_key: "key".to_string(),
             waha_base_url: "https://example.com".to_string(),
             waha_api_key: "key".to_string(),
             signal_base_url: "http://localhost:3001".to_string(),
+            ..Default::default()
         };
         let dispatcher = Arc::new(Dispatcher::new());
         let client_tls = WahaClient::new(config_tls, dispatcher);

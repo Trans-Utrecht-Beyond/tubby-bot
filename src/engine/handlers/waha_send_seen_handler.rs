@@ -24,21 +24,22 @@ impl Handler for WahaSendSeenHandler {
     }
 
     async fn handle(&self, trigger: Trigger) {
-        let Trigger::Waha(WahaEvent::Message(message_event)) = trigger;
-        debug!("Sending seen for message: {}", message_event.payload.id);
-        let send_seen_request = SendSeenRequest::new(
-            message_event.payload.id.clone(),
-            message_event.session.clone(),
-            vec![message_event.payload.id.clone()],
-        );
-        if let Err(e) = send_seen(
-            &self.config.waha_base_url,
-            &self.config.waha_api_key,
-            send_seen_request,
-        )
-        .await
-        {
-            error!("Failed to send seen: {}", e);
+        if let Trigger::Waha(WahaEvent::Message(message_event)) = trigger {
+            debug!("Sending seen for message: {}", message_event.payload.id);
+            let send_seen_request = SendSeenRequest::new(
+                message_event.payload.id.clone(),
+                message_event.session.clone(),
+                vec![message_event.payload.id.clone()],
+            );
+            if let Err(e) = send_seen(
+                &self.config.waha_base_url,
+                &self.config.waha_api_key,
+                send_seen_request,
+            )
+            .await
+            {
+                error!("Failed to send seen: {}", e);
+            }
         }
     }
 }
