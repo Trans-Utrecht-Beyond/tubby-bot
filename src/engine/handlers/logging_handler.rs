@@ -2,7 +2,7 @@ use crate::config::Config;
 use crate::engine::dispatcher::Handler;
 use crate::engine::trigger::Trigger;
 use async_trait::async_trait;
-use log::info;
+use log::debug;
 use std::sync::Arc;
 
 pub struct LoggingHandler {
@@ -23,6 +23,6 @@ impl Handler for LoggingHandler {
     }
 
     async fn handle(&self, trigger: Trigger) {
-        info!("Processing trigger: {:?}", trigger);
+        debug!("Processing trigger: {:?}", trigger);
     }
 }

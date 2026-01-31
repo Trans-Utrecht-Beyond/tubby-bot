@@ -87,7 +87,7 @@ impl WahaClient {
             }
             Err(_) => match serde_json::from_str::<serde_json::Value>(text) {
                 Ok(json) => {
-                    info!(
+                    debug!(
                         "Received unknown event: {}",
                         json.get("event")
                             .and_then(|v| v.as_str())

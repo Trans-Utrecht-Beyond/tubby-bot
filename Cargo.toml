@@ -17,3 +17,5 @@ log = "0.4"
 env_logger = "0.11"
 async-trait = "0.1"
 rand = {version = "0.9", features = ["thread_rng"]}
+futures = "0.3"
+base64 = "0.22"

@@ -1,9 +1,12 @@
+pub mod media;
 pub mod message_environment;
 pub mod message_event;
 pub mod message_me;
 pub mod message_payload;
 pub mod send_seen_request;
 pub mod waha_event;
+
+pub use media::WahaMedia;
 
 pub use message_environment::MessageEnvironment;
 pub use message_event::MessageEvent;
@@ -117,5 +120,58 @@ mod tests {
         assert_eq!(msg.payload.body, "Bla");
         assert!(msg.engine.is_none());
         assert_eq!(msg.environment.engine, "GOWS");
+    }
+
+    #[test]
+    fn test_deserialize_message_with_media() {
+        let json = r#"{
+  "id": "evt_01kg0z18webgjjc8jyk0mvg07b",
+  "session": "default",
+  "event": "message",
+  "payload": {
+    "id": "false_120363408101232619@g.us_AC79C12F3AD4F6D4A008CF6F141130D5_24610246492311@lid",
+    "timestamp": 1769559073,
+    "from": "120363408101232619@g.us",
+    "fromMe": false,
+    "source": "app",
+    "body": "Look at my cat",
+    "to": "24610246492311@lid",
+    "participant": "24610246492311@lid",
+    "hasMedia": true,
+    "media": {
+        "url": "http://localhost:3000/api/files/cat.jpg",
+        "mimetype": "image/jpeg",
+        "filename": "cat.jpg",
+        "error": null
+    },
+    "ack": 2,
+    "location": null,
+    "vCards": null,
+    "ackName": "DEVICE",
+    "replyTo": null,
+    "_data": {}
+  },
+  "timestamp": 1769559073678,
+  "me": {
+    "id": "31612879047@c.us",
+    "pushName": "Trans Utrecht and Beyond"
+  },
+  "environment": {
+    "version": "2026.1.4",
+    "engine": "GOWS",
+    "tier": "CORE",
+    "browser": null,
+    "platform": "linux/arm64"
+  }
+}"#;
+
+        let event: WahaEvent =
+            serde_json::from_str(json).expect("Failed to deserialize message with media");
+        let WahaEvent::Message(msg) = event;
+        assert!(msg.payload.has_media);
+        let media = msg.payload.media.expect("Media should be present");
+        assert_eq!(media.url, "http://localhost:3000/api/files/cat.jpg");
+        assert_eq!(media.mimetype, "image/jpeg");
+        assert_eq!(media.filename.unwrap(), "cat.jpg");
     }
 }

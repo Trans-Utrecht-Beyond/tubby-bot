@@ -17,3 +17,14 @@ pub async fn send_seen(
 
     Ok(())
 }
+
+pub async fn download_media(url: &str, api_key: &str) -> Result<Vec<u8>, Box<dyn Error>> {
+    let client = reqwest::Client::new();
+    let response = client
+        .get(url)
+        .headers(utils::get_headers(api_key))
+        .send()
+        .await?;
+    let bytes = response.bytes().await?;
+    Ok(bytes.to_vec())
+}

@@ -12,7 +12,7 @@ pub struct MessagePayload {
     pub to: String,
     pub body: String,
     pub has_media: bool,
-    pub media: Option<serde_json::Value>,
+    pub media: Option<super::WahaMedia>,
     pub ack: Option<i32>,
     pub ack_name: Option<String>,
     pub location: Option<serde_json::Value>,
